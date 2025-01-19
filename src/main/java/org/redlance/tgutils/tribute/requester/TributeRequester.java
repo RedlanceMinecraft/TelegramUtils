@@ -7,6 +7,7 @@ import io.github.kosmx.emotes.server.config.Serializer;
 import org.redlance.common.utils.requester.Requester;
 import org.redlance.tgutils.tribute.requester.obj.TributeDashboard;
 import org.redlance.tgutils.tribute.requester.obj.TributeDonationRequest;
+import org.redlance.tgutils.tribute.requester.obj.TributeInvoiceProduct;
 
 import java.io.IOException;
 import java.net.http.HttpRequest;
@@ -38,5 +39,14 @@ public class TributeRequester {
                 response.getAsJsonArray("donationRequests"),
                 TypeToken.getParameterized(List.class, TributeDonationRequest.class)
         );
+    }
+
+    public static TributeInvoiceProduct requestInvoiceProduct(String token, long id) throws IOException, InterruptedException {
+        HttpRequest request = MutableRequest.create()
+                .uri("https://tribute.tg/api/v4/invoice/product/" + id)
+                .header("authorization", "TgAuth " + token)
+                .build();
+
+        return Requester.sendRequest(request, TributeInvoiceProduct.class);
     }
 }
